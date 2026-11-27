@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lê Phượng Kể Chuyện | Tác giả cuốn sách "Bước Qua Cửa"</title>
+    
+    <!-- Google Fonts: Playfair Display cho tiêu đề văn chương & Lora cho văn xuôi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F5EFE6',       /* Nền kem ấm trùng bìa sách */
+                        paperDark: '#EBE2D3',   /* Nền kem đậm nhẹ tạo chiều sâu */
+                        ink: '#1E1E1E',         /* Đen than trùng chữ tiêu đề bìa */
+                        inkMuted: '#5A544B',
+                        navy: '#1E1E1E',        /* Đổi chủ đạo sang đen than sang trọng của bìa */
+                        navyLight: '#363636',
+                        amberWarm: '#E59400',   /* Vàng ánh sáng hắt ra từ cánh cửa */
+                        amberLight: '#FDE8B0',
+                        sprout: '#38761D'       /* Xanh lá mầm non ở ngưỡng cửa */
+                    },
+                    fontFamily: {
+                        serifTitle: ['"Playfair Display"', 'Georgia', 'serif'],
+                        serifBody: ['"Lora"', 'Georgia', 'serif'],
+                        sansUI: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F5EFE6;
+            color: #1E1E1E;
+            font-family: 'Lora', Georgia, serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hiệu ứng chuyển trang mượt mà */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.45s ease-out forwards;
+        }
+        .page-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mockup bìa sách 3D tinh tế */
+        .book-cover-wrapper {
+            perspective: 1200px;
+        }
+        .book-cover {
+            background: #F5EFE6;
+            box-shadow: 
+                -12px 16px 32px rgba(30, 30, 30, 0.18),
+                -3px 0 0 #1E1E1E,
+                -6px 0 0 #E5DEC9,
+                -8px 0 0 #1E1E1E;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .book-cover:hover {
+            transform: rotateY(-6deg) translateY(-4px);
+            box-shadow: 
+                -18px 22px 40px rgba(30, 30, 30, 0.24),
+                -3px 0 0 #1E1E1E,
+                -6px 0 0 #E5DEC9,
+                -8px 0 0 #1E1E1E;
+        }
+        .book-cover:hover {
+            transform: rotateY(-6deg) translateY(-4px);
+            box-shadow: 
+                -18px 22px 40px rgba(26, 54, 93, 0.3),
+                -3px 0 0 #0D1C33,
+                -6px 0 0 #E5DEC9,
+                -8px 0 0 #0D1C33;
+        }
+        /* Hiệu ứng gáy sách */
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 14px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.25) 50%, rgba(255,255,255,0.08) 100%);
+            z-index: 10;
+        }
+
+        /* Chế độ đọc thử sách */
+        .reader-paper {
+            background-color: #FFFDF9;
+            color: #222222;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .reader-sepia {
+            background-color: #F4ECD8;
+            color: #3B3226;
+        }
+        .reader-dark {
+            background-color: #1E2229;
+            color: #DCD7CD;
+        }
+
+        /* Thanh cuộn tinh tế */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D5CBBF;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C08552;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amberLight selection:text-ink">
+
+    <!-- Thanh trạng thái sách sắp phát hành -->
+    <div class="bg-ink text-paper text-xs font-sansUI py-2.5 px-4 text-center tracking-wide">
+        <span>🌱 Tác phẩm đầu tay <strong>“Bước Qua Cửa”</strong> dự kiến xuất bản cùng <strong>NXB Dân Trí</strong> — Đăng ký nhận thông báo ngày ra mắt</span>
+    </div>
+
+    <!-- Thanh điều hướng (Header / Navigation) -->
+    <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur-md border-b border-amberWarm/20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo / Tên tác giả -->
+                <button onclick="switchPage('home')" class="text-left group focus:outline-none">
+                    <span class="block font-serifTitle text-xl sm:text-2xl font-bold tracking-wider text-navy group-hover:text-amberWarm transition-colors">
+                        LÊ PHƯỢNG
+                    </span>
+                    <span class="block font-sansUI text-[11px] uppercase tracking-[0.18em] text-inkMuted mt-0.5">
+                        Lê Phượng Kể Chuyện · Bước Qua Cửa
+                    </span>
+                </button>
+
+                <!-- Menu Desktop -->
+                <nav class="hidden md:flex items-center space-x-8 font-sansUI text-sm font-medium">
+                    <button onclick="switchPage('home')" id="nav-home" class="nav-link text-navy border-b-2 border-amberWarm pb-1 transition-all">
+                        Trang chủ
+                    </button>
+                    <button onclick="switchPage('about')" id="nav-about" class="nav-link text-inkMuted hover:text-navy pb-1 border-b-2 border-transparent transition-all">
+                        Về tác giả
+                    </button>
+                    <button onclick="switchPage('book')" id="nav-book" class="nav-link text-inkMuted hover:text-navy pb-1 border-b-2 border-transparent transition-all">
+                        Tác phẩm: Bước Qua Cửa
+                    </button>
+                    <button onclick="switchPage('blog')" id="nav-blog" class="nav-link text-inkMuted hover:text-navy pb-1 border-b-2 border-transparent transition-all">
+                        Góc chia sẻ & Liên hệ
+                    </button>
+                </nav>
+
+                <!-- Nút mở menu Mobile -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-lg text-navy hover:bg-paperDark focus:outline-none" aria-label="Mở menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-paper border-b border-amberWarm/20 px-4 pt-2 pb-4 space-y-2 font-sansUI text-sm">
+            <button onclick="switchPage('home'); toggleMobileMenu()" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-lg font-medium text-navy bg-paperDark">Trang chủ</button>
+            <button onclick="switchPage('about'); toggleMobileMenu()" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-lg font-medium text-inkMuted hover:bg-paperDark">Về tác giả</button>
+            <button onclick="switchPage('book'); toggleMobileMenu()" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-lg font-medium text-inkMuted hover:bg-paperDark">Tác phẩm: Bước Qua Cửa</button>
+            <button onclick="switchPage('blog'); toggleMobileMenu()" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-lg font-medium text-inkMuted hover:bg-paperDark">Góc chia sẻ & Liên hệ</button>
+        </div>
+    </header>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="flex-grow">
+
+        <!-- =========================================================
+             TRANG 1: TRANG CHỦ (HOME)
+        ========================================================= -->
+        <section id="page-home" class="page-section active">
+            <!-- Hero Section -->
+            <div class="relative overflow-hidden border-b border-amberWarm/15">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        <!-- Cột chữ bên trái -->
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-sprout/10 border border-sprout/30 text-sprout font-sansUI text-xs font-semibold tracking-wider uppercase">
+                                <span>🌱 Sắp phát hành · NXB Dân Trí</span>
+                            </div>
+                            
+                            <h1 class="font-serifTitle text-4xl sm:text-5xl lg:text-6xl font-bold text-ink leading-tight tracking-tight">
+                                LÊ PHƯỢNG
+                            </h1>
+                            
+                            <p class="font-sansUI text-sm sm:text-base text-inkMuted tracking-wide">
+                                Tác giả &nbsp;·&nbsp; Nhà nghiên cứu &nbsp;·&nbsp; Người kể chuyện trên hành trình tự tìm mình
+                            </p>
+
+                            <blockquote class="relative py-4 px-6 bg-paperDark/70 border-l-4 border-amberWarm rounded-r-xl my-6 text-left">
+                                <p class="font-serifTitle italic text-xl sm:text-2xl text-navy leading-relaxed">
+                                    “Bước qua cửa không phải là bước ra thế giới. Đó là bước vào chính mình.”
+                                </p>
+                            </blockquote>
+
+                            <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 font-sansUI">
+                                <button onclick="switchPage('book')" class="w-full sm:w-auto px-7 py-3.5 bg-amberWarm hover:bg-[#cc8400] text-ink font-semibold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                                    <span>Khám phá cuốn sách đầu tay</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                </button>
+                                <button onclick="switchPage('blog')" class="w-full sm:w-auto px-7 py-3.5 bg-transparent hover:bg-paperDark text-ink border border-ink/30 font-medium text-sm rounded-xl transition-all">
+                                    Nhận thông báo ngày ra mắt
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Cột ảnh chân dung nghệ thuật bên phải -->
+                        <div class="lg:col-span-5 flex justify-center">
+                            <div class="relative w-full max-w-sm">
+                                <!-- Khung trang trí phía sau -->
+                                <div class="absolute -inset-3 bg-amberWarm/20 rounded-2xl transform rotate-3"></div>
+                                <div class="absolute -inset-3 border border-sprout/25 rounded-2xl transform -rotate-2"></div>
+                                
+                                <!-- Ảnh chân dung (Tự động nhận file chan-dung.jpg nếu bạn bỏ vào cùng thư mục) -->
+                                <div class="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5] bg-paperDark">
+                                    <img 
+                                        src="chan-dung.jpg" 
+                                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=85';"
+                                        alt="Chân dung tác giả Lê Phượng" 
+                                        class="w-full h-full object-cover object-center"
+                                    >
+                                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/85 via-ink/35 to-transparent p-6 text-white">
+                                        <p class="font-serifBody italic text-sm opacity-95">“Sau những lần bắt đầu, ta biết mình là ai.”</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lời chào ngắn gửi độc giả -->
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+                <div class="text-center mb-10">
+                    <span class="font-sansUI text-xs uppercase tracking-[0.25em] text-amberWarm font-semibold">Thư ngỏ</span>
+                    <h2 class="font-serifTitle text-3xl sm:text-4xl font-bold text-navy mt-2">Xin chào, mình là Lê Phượng</h2>
+                    <div class="w-16 h-0.5 bg-amberWarm mx-auto mt-4"></div>
+                </div>
+
+                <div class="bg-white/70 border border-amberWarm/20 rounded-2xl p-8 sm:p-12 shadow-sm space-y-5 text-base sm:text-lg leading-relaxed text-ink">
+                    <p>
+                        Lớn lên từ một ngôi làng quê yên ắng tối đèn sau chín giờ tối, mình từng đi qua những năm tháng tuổi trẻ thật ngoan ngoãn và “ổn định” theo đúng kỳ vọng của mọi người: học hành đến nơi đến chốn, chọn một ngành nghề an toàn, có một công việc đều đặn để ba mẹ yên lòng.
+                    </p>
+                    <p>
+                        Cho đến một đêm tháng Mười năm hai mươi ba tuổi bên ô cửa sổ gỗ sờn sơn, khi tiếng dế ngoài vườn rả rích vang lên trong đêm tĩnh mịch, một câu hỏi khẽ khàng bỗng làm tim mình hẫng đi một nhịp: <em class="text-navy font-medium">“Năm năm nữa, mình sẽ là ai?”</em>
+                    </p>
+                    <p>
+                        Trang web nhỏ này là nơi mình lưu giữ những trang viết, những lát cắt trải nghiệm từ phòng thí nghiệm khoa học đến những chân trời từng chỉ dám mơ trong trang nhật ký cũ — và là nơi chúng ta có thể trò chuyện cùng nhau như những người bạn đồng hành trên hành trình đi tìm chính mình.
+                    </p>
+                    <div class="pt-4 flex items-center justify-between border-t border-paperDark">
+                        <span class="font-serifTitle italic text-xl text-navy">Thân mến, Lê Phượng</span>
+                        <span class="text-amberWarm text-xl">✦</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Điểm nhấn cuốn sách "Bước Qua Cửa" -->
+            <div class="bg-paperDark/80 border-t border-amberWarm/15 py-16 sm:py-24">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        
+                        <!-- Mockup Bìa Sách Thiết Kế Tinh Tế Bằng CSS/SVG -->
+                        <div class="lg:col-span-5 flex justify-center book-cover-wrapper">
+                            <div class="book-cover w-72 sm:w-80 h-[440px] sm:h-[480px] rounded-r-xl rounded-l-sm p-8 flex flex-col justify-between text-paper select-none">
+                                <!-- Phần trên bìa sách -->
+                                <div class="text-center space-y-2 pt-2">
+                                    <p class="font-sansUI text-[10px] uppercase tracking-[0.3em] text-amberLight/80">Tản văn · Tự sự trải nghiệm</p>
+                                    <div class="w-8 h-[1px] bg-amberWarm mx-auto"></div>
+                                </div>
+
+                                <!-- Hình minh họa Cánh Cửa Mở Ra Ánh Sáng (SVG) -->
+                                <div class="my-auto flex flex-col items-center">
+                                    <svg class="w-32 h-40 mb-5" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Hào quang ánh sáng hắt ra từ khe cửa -->
+                                        <polygon points="48,25 115,10 115,170 48,155" fill="url(#doorLight)" opacity="0.85"/>
+                                        <!-- Khung cửa -->
+                                        <rect x="45" y="22" width="52" height="136" stroke="#C08552" stroke-width="1.5"/>
+                                        <!-- Cánh cửa đang mở hé -->
+                                        <polygon points="45,22 82,32 82,148 45,158" fill="#13294B" stroke="#E8D5C4" stroke-width="1.2"/>
+                                        <!-- Tay nắm cửa -->
+                                        <circle cx="75" cy="92" r="2.2" fill="#E8D5C4"/>
+                                        <!-- Đường chân sàn -->
+                                        <line x1="20" y1="158" x2="120" y2="158" stroke="#C08552" stroke-width="1" stroke-dasharray="2 2"/>
+                                        <defs>
+                                            <linearGradient id="doorLight" x1="48" y1="90" x2="115" y2="90" gradientUnits="userSpaceOnUse">
+                                                <stop stop-color="#FAF3E0" stop-opacity="0.9"/>
+                                                <stop offset="1" stop-color="#C08552" stop-opacity="0"/>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+
+                                    <h3 class="font-serifTitle text-3xl sm:text-4xl font-bold tracking-wide text-center text-[#FAF3E0]">
+                                        BƯỚC QUA CỬA
+                                    </h3>
+                                    <p class="font-serifBody italic text-xs sm:text-sm text-amberLight text-center mt-2.5 px-2 leading-relaxed">
+                                        Sau những lần bắt đầu, ta biết mình là ai
+                                    </p>
+                                </div>
+
+                                <!-- Tên tác giả dưới bìa -->
+                                <div class="text-center border-t border-amberWarm/30 pt-3">
+                                    <span class="font-sansUI text-xs uppercase tracking-[0.28em] text-paper/90 font-medium">LÊ PHƯỢNG</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nội dung giới thiệu bìa sau (218 từ chuẩn chỉnh) -->
+                        <div class="lg:col-span-7 space-y-5">
+                            <span class="font-sansUI text-xs uppercase tracking-[0.2em] text-amberWarm font-semibold">Giới thiệu tác phẩm</span>
+                        <!-- Bìa Sách Chính Thức (Tự động nhận file bia-sach.jpg nếu bạn bỏ vào thư mục, hoặc hiển thị mockup đồng bộ bìa thật) -->
+                        <div class="lg:col-span-5 flex flex-col items-center book-cover-wrapper">
+                            <div class="book-cover w-72 sm:w-80 h-[450px] sm:h-[490px] rounded-r-xl rounded-l-sm border border-ink/10 select-none">
+                                <!-- Nếu có file bia-sach.jpg trong thư mục sẽ hiện ảnh bìa thật 100% -->
+                                <img 
+                                    id="real-book-cover"
+                                    src="bia-sach.jpg" 
+                                    onload="document.getElementById('svg-book-fallback').style.display='none'"
+                                    onerror="this.style.display='none'"
+                                    alt="Bìa sách chính thức Bước Qua Cửa - Lê Phượng" 
+                                    class="w-full h-full object-cover"
+                                >
+                                <!-- Bản vẽ vector mô phỏng đúng thiết kế bìa thật (cánh cửa vòm vàng + mầm xanh) khi chưa có file ảnh cục bộ -->
+                                <div id="svg-book-fallback" class="w-full h-full p-7 flex flex-col justify-between text-ink">
+                                    <div class="text-center pt-1">
+                                        <span class="font-sansUI text-xs uppercase tracking-[0.35em] text-ink font-semibold">LÊ PHƯỢNG</span>
+                                        <h3 class="font-serifTitle text-3xl sm:text-4xl font-bold tracking-wide text-ink mt-4">
+                                            BƯỚC QUA CỬA
+                                        </h3>
+                                        <p class="font-serifBody italic text-sm text-inkMuted mt-2 leading-snug">
+                                            Sau những lần bắt đầu,<br>ta biết mình là ai
+                                        </p>
+                                    </div>
+
+                                    <!-- Minh họa Cửa Vòm Vàng & Mầm Xanh chuẩn bìa thật -->
+                                    <div class="my-auto flex justify-center">
+                                        <svg class="w-44 h-52" viewBox="0 0 180 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <!-- Ánh sáng trải dài ra ngưỡng cửa -->
+                                            <polygon points="52,165 128,165 162,205 18,205" fill="url(#floorGlow)" opacity="0.75"/>
+                                            <!-- Vòm cửa màu vàng nắng -->
+                                            <path d="M52 165 V85 C52 55 128 55 128 85 V165 Z" fill="url(#archGold)" stroke="#1E1E1E" stroke-width="4.5"/>
+                                            <!-- Mầm xanh vươn lên bên trái ngưỡng cửa -->
+                                            <path d="M44 166 C44 152 43 144 43 136" stroke="#38761D" stroke-width="2.5" stroke-linecap="round"/>
+                                            <path d="M43 145 C33 143 27 135 28 128 C36 128 42 135 43 145 Z" fill="#4C9A2A"/>
+                                            <path d="M43 141 C52 138 58 131 57 124 C49 125 44 132 43 141 Z" fill="#38761D"/>
+                                            <ellipse cx="36" cy="168" rx="10" ry="2.5" fill="#1E1E1E" opacity="0.25"/>
+                                            <defs>
+                                                <linearGradient id="archGold" x1="115" y1="65" x2="60" y2="165" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#FFD23F"/>
+                                                    <stop offset="1" stop-color="#F29F05"/>
+                                                </linearGradient>
+                                                <linearGradient id="floorGlow" x1="90" y1="165" x2="90" y2="205" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#FDE09B"/>
+                                                    <stop offset="1" stop-color="#F5EFE6" stop-opacity="0"/>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                    </div>
+
+                                    <div class="text-center pb-1">
+                                        <span class="font-sansUI text-[9px] uppercase tracking-[0.18em] text-inkMuted font-semibold">NHÀ XUẤT BẢN DÂN TRÍ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="font-sansUI text-xs text-inkMuted italic mt-4 text-center max-w-xs">
+                                * Bìa sách chính thức dự kiến phát hành. Tác phẩm hiện đang trong giai đoạn hoàn thiện bản thảo cuối cùng.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-7 space-y-5 text-base sm:text-lg leading-relaxed text-ink">
+                        <p>
+                            <strong class="text-navy font-semibold">Lê Phượng</strong> là một nhà nghiên cứu trẻ hiện đang sinh sống và làm việc tại Đài Loan, theo đuổi hướng ứng dụng trí tuệ nhân tạo (AI) trong hỗ trợ chẩn đoán y khoa qua hình ảnh X-quang.
+                        </p>
+                        <p>
+                            Hành trình của chị bắt đầu từ một ngôi làng quê bình dị ở Việt Nam — nơi những lựa chọn đầu đời từng được định hình bởi sự an toàn và tình thương của gia đình. Bước chân ra thế giới với chiếc va li nặng trĩu kỳ vọng, chị đã đi qua những ngày đầu ngọng nghịu học từng thanh điệu ngoại ngữ, những đêm thức trắng đối diện với biến cố sức khỏe của mẹ nơi phòng thí nghiệm, cho đến những giờ phút run tay lần đầu đứng trên bục giảng đại học.
+                        </p>
+                        <p>
+                            Từ một cô gái từng chỉ dám viết ước mơ đi xa vào trang cuối cuốn nhật ký cũ, hành trình nghiên cứu và công tác đã đưa đôi chân chị chạm tới nhiều vùng đất mới: từ đảo quốc Singapore hiện đại (nơi chị tự tay đưa em trai sang du học), kinh đô ánh sáng Paris, hoàng hôn huyền bí ở Santorini cho đến những đại lộ thênh thang của nước Mỹ.
+                        </p>
+                        <p>
+                            Với Lê Phượng, viết lách không phải là hành trình truyền đạt những bài học cao siêu, mà là cách thành thật đối diện với những khoảng trống bên trong mình — để bất kỳ người trẻ nào đang chênh vênh trước ngã rẽ cuộc đời cũng nhận ra: <em>mình không hề cô đơn.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3 Dấu mốc định hình con người & trang viết -->
+                <div class="mb-20">
+                    <h2 class="font-serifTitle text-2xl sm:text-3xl font-bold text-navy text-center mb-10">
+                        Ba mảnh ghép định hình con người & trang viết
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Thẻ 1 -->
+                        <div class="bg-white border border-amberWarm/20 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 rounded-xl bg-navy/10 text-navy flex items-center justify-center mb-5">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <h3 class="font-serifTitle text-xl font-bold text-navy mb-3">Nghiên cứu khoa học với trái tim ấm áp</h3>
+                            <p class="text-sm sm:text-base text-inkMuted leading-relaxed">
+                                Theo đuổi công nghệ AI chẩn đoán hình ảnh X-quang từ chính biến cố bệnh tật của mẹ, tin rằng khoa học chỉ thật sự có ý nghĩa khi hướng về sự sống và con người.
+                            </p>
+                        </div>
+
+                        <!-- Thẻ 2 -->
+                        <div class="bg-white border border-amberWarm/20 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 rounded-xl bg-amberWarm/15 text-amberWarm flex items-center justify-center mb-5">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            </div>
+                            <h3 class="font-serifTitle text-xl font-bold text-navy mb-3">Người gieo mầm trên bục giảng</h3>
+                            <p class="text-sm sm:text-base text-inkMuted leading-relaxed">
+                                Giảng dạy và đồng hành cùng sinh viên với triết lý <em>“Dạy và học là một”</em> — dám thừa nhận những điều chưa biết để cùng người học khám phá và trưởng thành.
+                            </p>
+                        </div>
+
+                        <!-- Thẻ 3 -->
+                        <div class="bg-white border border-amberWarm/20 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 rounded-xl bg-navy/10 text-navy flex items-center justify-center mb-5">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </div>
+                            <h3 class="font-serifTitle text-xl font-bold text-navy mb-3">Người viết tản văn – tự sự</h3>
+                            <p class="text-sm sm:text-base text-inkMuted leading-relaxed">
+                                Ghi lại hành trình tự tìm mình bằng giọng văn mộc mạc, giàu chiêm nghiệm, không giáo điều — như những lá thư tay gửi người bạn đường trẻ tuổi.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thư viện ảnh hành trình (Photo Gallery) -->
+                <div>
+                    <div class="text-center mb-10">
+                        <span class="font-sansUI text-xs uppercase tracking-[0.25em] text-amberWarm font-semibold">Dấu chân kỷ niệm</span>
+                        <h2 class="font-serifTitle text-2xl sm:text-3xl font-bold text-navy mt-2">Những chân trời từng nằm trong nhật ký</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <!-- Ảnh 1: Đài Loan (Tự động nhận file IMG_7916.jpg trong thư mục của bạn) -->
+                        <div class="group bg-white rounded-2xl overflow-hidden border border-amberWarm/20 shadow-sm">
+                            <div class="aspect-[4/3] overflow-hidden">
+                                <img src="IMG_7916.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1470004914212-05527e49370b?auto=format&fit=crop&w=600&q=80';" alt="Đài Loan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="p-4">
+                                <span class="font-sansUI text-[11px] font-semibold uppercase tracking-wider text-amberWarm">Đài Loan</span>
+                                <p class="text-sm text-ink mt-1">Những ngày tháng học tập, nghiên cứu và trưởng thành nơi xứ người.</p>
+                            </div>
+                        </div>
+
+                        <!-- Ảnh 2: Singapore -->
+                        <div class="group bg-white rounded-2xl overflow-hidden border border-amberWarm/20 shadow-sm">
+                            <div class="aspect-[4/3] overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=600&q=80" onerror="this.src='https://placehold.co/600x450/1A365D/FAF8F5?text=Singapore'" alt="Singapore" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="p-4">
+                                <span class="font-sansUI text-[11px] font-semibold uppercase tracking-wider text-amberWarm">Singapore</span>
+                                <p class="text-sm text-ink mt-1">Giấc mơ năm hai mươi tuổi thành hiện thực — nơi công tác và đưa em trai sang du học.</p>
+                            </div>
+                        </div>
+
+                        <!-- Ảnh 3: Santorini -->
+                        <div class="group bg-white rounded-2xl overflow-hidden border border-amberWarm/20 shadow-sm">
+                            <div class="aspect-[4/3] overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80" onerror="this.src='https://placehold.co/600x450/1A365D/FAF8F5?text=Santorini'" alt="Santorini" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="p-4">
+                                <span class="font-sansUI text-[11px] font-semibold uppercase tracking-wider text-amberWarm">Santorini · Hy Lạp</span>
+                                <p class="text-sm text-ink mt-1">Hoàng hôn huyền bí như một bức tranh bên bờ biển Địa Trung Hải.</p>
+                            </div>
+                        </div>
+
+                        <!-- Ảnh 4: Góc viết & Sách -->
+                        <div class="group bg-white rounded-2xl overflow-hidden border border-amberWarm/20 shadow-sm">
+                            <div class="aspect-[4/3] overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&q=80" onerror="this.src='https://placehold.co/600x450/1A365D/FAF8F5?text=Ban+Thao'" alt="Góc viết lách" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="p-4">
+                                <span class="font-sansUI text-[11px] font-semibold uppercase tracking-wider text-amberWarm">Góc viết lách</span>
+                                <p class="text-sm text-ink mt-1">Những trang nhật ký đêm khuya kết tinh thành bản thảo “Bước Qua Cửa”.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             TRANG 3: TÁC PHẨM — BƯỚC QUA CỬA (THE BOOK)
+        ========================================================= -->
+        <section id="page-book" class="page-section">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+                <!-- Header thông tin sách -->
+                <div class="bg-white border border-amberWarm/25 rounded-3xl p-8 sm:p-12 shadow-sm mb-14">
+                    <div class="flex flex-col md:flex-row gap-8 items-center justify-between">
+                        <div class="space-y-3 max-w-2xl">
+                            <span class="font-sansUI text-xs uppercase tracking-[0.25em] text-amberWarm font-semibold">Thông tin xuất bản</span>
+                            <h1 class="font-serifTitle text-3xl sm:text-4xl font-bold text-navy">
+                                Bước Qua Cửa — Sau những lần bắt đầu, ta biết mình là ai
+                            </h1>
+                            <p class="text-inkMuted text-base sm:text-lg">
+                                Tác giả: <strong class="text-ink">Lê Phượng</strong> &nbsp;|&nbsp; Thể loại: <strong class="text-ink">Tản văn – Tự sự trải nghiệm</strong> &nbsp;|&nbsp; Dung lượng: <strong class="text-ink">13 chương</strong>
+                            </p>
+                            <p class="text-sm sm:text-base text-ink/85 pt-2 leading-relaxed">
+                                Cuốn sách không đưa ra những công thức thành công sáo rỗng, mà kể lại hành trình có thật của một người trẻ bước ra từ ngôi làng quê yên ắng, đối diện với những ngã rẽ lựa chọn, biến cố gia đình và học cách tự cầm lái cuộc đời mình.
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <button onclick="scrollToReader()" class="px-6 py-3.5 bg-navy hover:bg-navyLight text-white font-sansUI text-sm font-medium rounded-xl shadow transition-all">
+                                Đọc trích đoạn Chương 1 ↓
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mục lục 13 chương tương tác -->
+                <div class="mb-16">
+                    <div class="text-center mb-8">
+                        <span class="font-sansUI text-xs uppercase tracking-[0.25em] text-amberWarm font-semibold">Cấu trúc tác phẩm</span>
+                        <h2 class="font-serifTitle text-2xl sm:text-3xl font-bold text-navy mt-1">Mục lục 13 chương hành trình</h2>
+                        <p class="font-sansUI text-xs text-inkMuted mt-2">(Nhấn vào từng chương để xem nội dung tóm tắt)</p>
+                    </div>
+
+                    <div id="toc-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 font-sansUI">
+                        <!-- Danh sách 13 chương được render tự động bằng JS để dễ bấm mở rộng -->
+                    </div>
+                </div>
+
+                <!-- Khung Đọc Thử Chương 1 (Interactive Book Reader) -->
+                <div id="chapter-reader" class="scroll-mt-24">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div>
+                            <span class="font-sansUI text-xs uppercase tracking-[0.2em] text-amberWarm font-semibold">Đọc thử miễn phí</span>
+                            <h2 class="font-serifTitle text-2xl font-bold text-navy">Chương 1 · Đêm hỏi mình là ai</h2>
+                        </div>
+
+                        <!-- Thanh công cụ trải nghiệm đọc (Cỡ chữ & Nền đọc) -->
+                        <div class="flex items-center gap-2 font-sansUI text-xs bg-white border border-amberWarm/25 p-1.5 rounded-xl shadow-sm self-start">
+                            <button onclick="changeFontSize(-1)" class="px-2.5 py-1.5 rounded-lg hover:bg-paperDark text-ink font-semibold" title="Thu nhỏ chữ">A-</button>
+                            <button onclick="changeFontSize(1)" class="px-2.5 py-1.5 rounded-lg hover:bg-paperDark text-ink font-semibold" title="Phóng to chữ">A+</button>
+                            <div class="w-[1px] h-4 bg-amberWarm/30 mx-1"></div>
+                            <button onclick="setReaderTheme('paper')" class="px-2.5 py-1.5 rounded-lg bg-[#FFFDF9] border border-gray-300 text-ink font-medium">Sáng</button>
+                            <button onclick="setReaderTheme('sepia')" class="px-2.5 py-1.5 rounded-lg bg-[#F4ECD8] border border-amber-300 text-[#3B3226] font-medium">Giấy cũ</button>
+                            <button onclick="setReaderTheme('dark')" class="px-2.5 py-1.5 rounded-lg bg-[#1E2229] text-gray-200 font-medium">Ban đêm</button>
+                        </div>
+                    </div>
+
+                    <!-- Trang sách đọc thử -->
+                    <article id="reader-box" class="reader-paper border border-amberWarm/25 rounded-2xl p-6 sm:p-12 lg:p-16 shadow-md space-y-6 text-base sm:text-lg leading-[1.9]">
+                        <div class="text-center border-b border-amberWarm/20 pb-8 mb-8">
+                            <p class="font-sansUI text-xs uppercase tracking-[0.3em] text-amberWarm mb-2">Chương 1</p>
+                            <h3 class="font-serifTitle text-3xl sm:text-4xl font-bold text-navy">ĐÊM HỎI MÌNH LÀ AI</h3>
+                            <p class="font-serifBody italic text-sm sm:text-base opacity-80 mt-3 max-w-xl mx-auto">
+                                “Có những thay đổi không bắt đầu bằng một quyết định lớn, mà bằng khoảnh khắc ta nhận ra mình cần hiểu bản thân hơn.”
+                            </p>
+                        </div>
+
+                        <p>Đêm ở làng tôi tối rất sớm.</p>
+                        <p>
+                            Không phải vì thiếu điện, mà vì sau chín giờ, nhà nào cũng đã tắt đèn. Người trong xóm dậy từ khi trời còn tối nên đi ngủ cũng sớm. Cả xóm chìm vào yên tĩnh như một bức tranh vẽ bằng mực: mái nhà thấp, hàng cây đen sẫm, con đường nhỏ chỉ còn vài quầng sáng leo lét dưới ánh đèn đường.
+                        </p>
+                        <p>
+                            Tôi lớn lên trong sự yên tĩnh ấy, quen đến mức nhiều khi chẳng còn nhận ra nó. Đêm xuống, cửa từng nhà lần lượt khép lại, tiếng người thưa dần rồi chỉ còn tiếng dế, ngôi làng như thu mình lại sau một ngày dài. Năm này qua năm khác, những đêm như thế lặp lại bình dị đến mức tôi chưa bao giờ nghĩ sẽ có một đêm mình nhớ mãi.
+                        </p>
+                        <p>
+                            Ấy vậy mà có một đêm như thế thật. Đêm tháng Mười se lạnh, gió ngoài vườn xào xạc thổi qua rặng tre sau nhà. Tôi ngồi bên bậu cửa sổ gỗ đã sờn sơn, chống cằm nhìn ra khoảng sân tối mịt, và bỗng thấy lòng mình hẫng đi một nhịp lạ lùng.
+                        </p>
+                        <p>
+                            Năm ấy tôi hai mươi ba tuổi. Tôi đã học xong đại học, đã có một công việc, đã bước vào cuộc sống mà người lớn vẫn gọi là “ổn định”. Mọi thứ diễn ra đúng trình tự tôi từng hình dung từ hồi còn là cô bé ngồi học bài dưới ngọn đèn bàn. Vậy mà trong khoảnh khắc ấy, tôi chợt nhận ra mình không biết điều gì đang chờ phía trước. Hay đúng hơn, tôi không biết mình thực sự mong đợi điều gì.
+                        </p>
+                        <p class="font-serifTitle italic text-xl sm:text-2xl text-center py-3 text-amberWarm">
+                            “Năm năm nữa, mình sẽ là ai?”
+                        </p>
+                        <p>
+                            Không phải “mình sẽ làm gì?”. Câu ấy tôi có thể trả lời ngay, dù chưa chắc đã thích câu trả lời của mình. Mà là “mình sẽ là ai?”, một câu hỏi nghe thật giản dị, nhưng khi tôi thử tìm lời đáp, trong đầu chỉ có một khoảng trắng.
+                        </p>
+
+                        <div class="text-center text-amberWarm tracking-[0.5em] py-4">* * *</div>
+
+                        <p>
+                            Hồi đi học, tôi là kiểu học trò mà thầy cô hay gọi là “học được”. Không giỏi nổi bật, cũng chẳng bao giờ khiến ai phải lo chuyện lên lớp. Bảng điểm của tôi lúc nào cũng đều đều, lưng chừng ở khoảng giữa, như một con đường làng bằng phẳng, không có dốc, cũng không có khúc quanh.
+                        </p>
+                        <p>
+                            Tôi còn nhớ những buổi chiều cuối năm học, mẹ mở cuốn học bạ bọc giấy báo cũ, đọc chậm từng dòng thầy cô viết. Mùi giấy báo ngai ngái quyện với mùi khói bếp chiều bảng lảng quanh hiên. Năm nào lời phê cũng gần giống nhau: “Học lực khá. Ngoan, chăm chỉ. Cần mạnh dạn phát biểu hơn.” Mẹ gật gù, gấp sổ lại, cất vào ngăn tủ cùng những giấy tờ quan trọng trong nhà. Không ai phải phiền lòng vì tôi. Mà cũng chẳng ai thấy cần hỏi thêm điều gì.
+                        </p>
+                        <p>
+                            Đến năm cuối cấp, khi cả lớp xôn xao chuyện làm hồ sơ thi đại học, tôi mang tờ phiếu đăng ký về nhà mà không biết viết gì vào ô nguyện vọng. Tối hôm ấy, chú tôi, người duy nhất trong họ đi làm ở thành phố, ghé chơi. Bên ấm trà nóng đặt giữa bàn, nghe ba kể, chú cầm tờ phiếu lên xem, nheo mắt nhìn qua cặp kính lão rồi bảo: “Con gái học ngành này là ổn nhất. Ra trường dễ xin việc, làm gần nhà, lương không cao nhưng chắc chắn.” Ba gật đầu. Mẹ cũng gật đầu. Còn tôi cầm bút điền vào ô trống, nét chữ ngay ngắn như mọi lần làm bài.
+                        </p>
+                        <p>
+                            Tôi không thấy mình bị ép. Chẳng ai ép tôi cả. Chỉ là khi chính mình chưa có câu trả lời, câu trả lời của người khác rất dễ trở thành của mình. Những năm tháng ấy, tôi giống như một hành khách ngoan ngoãn ngồi trên chuyến tàu đã được định sẵn ga đi, ga đến — chẳng cần phải nhìn bản đồ, cũng chẳng bao giờ tự hỏi liệu mình có muốn xuống ở một trạm dừng nào khác hay không...
+                        </p>
+
+                        <div class="mt-8 pt-6 border-t border-amberWarm/20 text-center">
+                            <p class="font-sansUI text-sm text-inkMuted mb-4">Bạn vừa đọc trích đoạn mở đầu Chương 1 · <em>Bước Qua Cửa</em></p>
+                            <button onclick="switchPage('blog')" class="px-6 py-2.5 bg-navy text-white font-sansUI text-sm rounded-xl hover:bg-navyLight transition-colors">
+                                Gửi cảm nhận đọc thử cho tác giả →
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             TRANG 4: GÓC CHIA SẺ & LIÊN HỆ (BLOG & CONTACT)
+        ========================================================= -->
+        <section id="page-blog" class="page-section">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+                
+                <!-- Phần 1: Những lá thư gửi bạn đọc -->
+                <div class="mb-20">
+                    <div class="text-center max-w-2xl mx-auto mb-12">
+                        <span class="font-sansUI text-xs uppercase tracking-[0.25em] text-amberWarm font-semibold">Tản văn & Hậu trường viết</span>
+                        <h1 class="font-serifTitle text-3xl sm:text-4xl font-bold text-navy mt-2">Những lá thư gửi bạn đọc</h1>
+                        <div class="w-16 h-0.5 bg-amberWarm mx-auto mt-4"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Bài viết 1 -->
+                        <article class="bg-white border border-amberWarm/20 rounded-2xl p-7 sm:p-8 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between font-sansUI text-xs text-amberWarm font-medium mb-3">
+                                    <span>Hậu trường bản thảo</span>
+                                    <span>Tháng 11, 2026</span>
+                                </div>
+                                <h2 class="font-serifTitle text-2xl font-bold text-navy mb-3">
+                                    Vì sao mình chọn kể chuyện thay vì đưa ra lời khuyên?
+                                </h2>
+                                <p class="text-inkMuted text-sm sm:text-base leading-relaxed mb-6">
+                                    Khi bắt đầu viết những chương đầu tiên của “Bước Qua Cửa”, mình từng có thói quen phân tích và đúc kết thật nhiều bài học. Cho đến khi nhận ra: điều chạm đến trái tim người đọc nhất không phải là lý thuyết, mà là sự thành thật...
+                                </p>
+                            </div>
+                            <button onclick="openArticleModal(1)" class="self-start font-sansUI text-sm font-semibold text-navy hover:text-amberWarm flex items-center gap-1.5 transition-colors">
+                                <span>Đọc toàn bộ lá thư</span>
+                                <span>→</span>
+                            </button>
+                        </article>
+
+                        <!-- Bài viết 2 -->
+                        <article class="bg-white border border-amberWarm/20 rounded-2xl p-7 sm:p-8 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between font-sansUI text-xs text-amberWarm font-medium mb-3">
+                                    <span>Nhật ký xứ người</span>
+                                    <span>Tháng 10, 2026</span>
+                                </div>
+                                <h2 class="font-serifTitle text-2xl font-bold text-navy mb-3">
+                                    Bát phở trong con hẻm nhỏ và nỗi nhớ cơm nhà
+                                </h2>
+                                <p class="text-inkMuted text-sm sm:text-base leading-relaxed mb-6">
+                                    Có những buổi tối tan phòng lab muộn giữa mùa gió lạnh ở Đài Loan, thứ sưởi ấm lòng mình không phải là một thành tựu khoa học lớn lao, mà chỉ là mùi quế hồi thoang thoảng từ một quán phở Việt nhỏ nép mình cuối ngõ...
+                                </p>
+                            </div>
+                            <button onclick="openArticleModal(2)" class="self-start font-sansUI text-sm font-semibold text-navy hover:text-amberWarm flex items-center gap-1.5 transition-colors">
+                                <span>Đọc toàn bộ lá thư</span>
+                                <span>→</span>
+                            </button>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Phần 2: Hộp thư tương tác độc giả (Mô phỏng Google Forms nhúng) -->
+                <div class="bg-white border border-amberWarm/25 rounded-3xl p-8 sm:p-12 shadow-sm">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                        <div class="lg:col-span-5 space-y-4">
+                            <span class="font-sansUI text-xs uppercase tracking-[0.2em] text-amberWarm font-semibold">Kết nối cùng tác giả</span>
+                            <h2 class="font-serifTitle text-2xl sm:text-3xl font-bold text-navy">
+                                Cánh cửa nào đang ở trước mặt bạn?
+                            </h2>
+                            <p class="text-sm sm:text-base text-inkMuted leading-relaxed">
+                                Dù bạn là một độc giả đang đứng trước ngã rẽ tuổi trẻ, một người bạn muốn chia sẻ cảm nhận sau khi đọc trích đoạn, hay đơn vị báo chí / xuất bản muốn trao đổi công việc — Phượng luôn trân trọng từng dòng nhắn gửi của bạn.
+                            </p>
+                            <div class="pt-4 space-y-2.5 font-sansUI text-sm text-ink">
+                                <p class="flex items-center gap-2.5">
+                                    <span class="text-amberWarm">✉</span>
+                                    <span>Email: <strong>lephuong.author@gmail.com</strong></span>
+                                </p>
+                                <p class="flex items-center gap-2.5">
+                                    <span class="text-amberWarm">📍</span>
+                                    <span>Hiện tại: Đào Viên, Đài Loan</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-7">
+                            <form id="reader-form" onsubmit="handleFormSubmit(event)" class="space-y-4 font-sansUI">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-navy uppercase tracking-wider mb-1.5">Tên của bạn *</label>
+                                        <input type="text" required placeholder="Ví dụ: Minh Anh" class="w-full px-4 py-3 rounded-xl bg-paper border border-amberWarm/30 focus:outline-none focus:border-navy text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-navy uppercase tracking-wider mb-1.5">Email liên hệ *</label>
+                                        <input type="email" required placeholder="ban@example.com" class="w-full px-4 py-3 rounded-xl bg-paper border border-amberWarm/30 focus:outline-none focus:border-navy text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-navy uppercase tracking-wider mb-1.5">Chủ đề nhắn gửi</label>
+                                    <select class="w-full px-4 py-3 rounded-xl bg-paper border border-amberWarm/30 focus:outline-none focus:border-navy text-sm text-ink">
+                                        <option>Đăng ký nhận thông báo ngày sách "Bước Qua Cửa" chính thức phát hành</option>
+                                        <option>Chia sẻ cảm nhận sau khi đọc trích đoạn Chương 1</option>
+                                        <option>Kể cho Phượng nghe câu chuyện của bạn</option>
+                                        <option>Liên hệ báo chí / Sự kiện / Hợp tác xuất bản</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-navy uppercase tracking-wider mb-1.5">Lời nhắn gửi đến Lê Phượng *</label>
+                                    <textarea rows="4" required placeholder="Viết những điều bạn đang trăn trở hoặc cảm nhận của bạn tại đây..." class="w-full px-4 py-3 rounded-xl bg-paper border border-amberWarm/30 focus:outline-none focus:border-navy text-sm"></textarea>
+                                </div>
+                                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-navy hover:bg-navyLight text-white font-medium text-sm rounded-xl shadow transition-all">
+                                    Gửi lá thư này
+                                </button>
+                            </form>
+
+                            <!-- Hộp thông báo gửi thành công -->
+                            <div id="form-success" class="hidden bg-paperDark border border-amberWarm/40 rounded-2xl p-6 text-center space-y-3">
+                                <div class="w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center mx-auto text-xl">✓</div>
+                                <h3 class="font-serifTitle text-xl font-bold text-navy">Cảm ơn bạn đã gửi lời nhắn!</h3>
+                                <p class="text-sm text-inkMuted">Lá thư của bạn đã được chuyển tới hộp thư của Lê Phượng. Phượng sẽ đọc thật kỹ và hồi âm bạn sớm nhất có thể.</p>
+                                <button onclick="resetForm()" class="font-sansUI text-xs text-amberWarm font-semibold underline pt-2">Gửi thêm một lời nhắn khác</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy text-paper/85 border-t border-amberWarm/20 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <span class="font-serifTitle text-xl font-bold tracking-wider text-white">LÊ PHƯỢNG</span>
+                    <p class="font-serifBody italic text-sm text-amberLight mt-1">“Bước qua cửa không phải là bước ra thế giới. Đó là bước vào chính mình.”</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 font-sansUI text-xs uppercase tracking-wider">
+                    <button onclick="switchPage('home')" class="hover:text-amberLight transition-colors">Trang chủ</button>
+                    <button onclick="switchPage('about')" class="hover:text-amberLight transition-colors">Về tác giả</button>
+                    <button onclick="switchPage('book')" class="hover:text-amberLight transition-colors">Bước Qua Cửa</button>
+                    <button onclick="switchPage('blog')" class="hover:text-amberLight transition-colors">Liên hệ</button>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-8 pt-6 text-center font-sansUI text-xs text-paper/60">
+                © 2026 Lê Phượng. Bản quyền nội dung thuộc về tác giả.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal đọc bài viết blog -->
+    <div id="article-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-paper border border-amberWarm/30 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-10 shadow-2xl relative">
+            <button onclick="closeArticleModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-paperDark hover:bg-amberWarm hover:text-white flex items-center justify-center font-sansUI text-sm transition-colors">✕</button>
+            <span id="modal-tag" class="font-sansUI text-xs uppercase tracking-widest text-amberWarm font-semibold"></span>
+            <h3 id="modal-title" class="font-serifTitle text-2xl sm:text-3xl font-bold text-navy mt-2 mb-6"></h3>
+            <div id="modal-body" class="space-y-4 text-base leading-relaxed text-ink"></div>
+        </div>
+    </div>
+
+    <script>
+        // Gắn toàn bộ hàm vào window để tránh lỗi ReferenceError trên trình duyệt sandbox
+        window.chaptersData = [
+            { num: "Chương 1", title: "Đêm hỏi mình là ai", desc: "Khoảnh khắc thức tỉnh năm 23 tuổi bên ô cửa sổ làng quê tối đèn sau chín giờ tối, lần đầu tiên đặt câu hỏi về con người mình muốn trở thành." },
+            { num: "Chương 2", title: "Chọn mà không thật sự chọn", desc: "Hồi ức mùa làm hồ sơ đại học năm 18 tuổi với những lựa chọn bằng phương pháp loại trừ và nỗi sợ 'uổng phí' giữ chân người trẻ." },
+            { num: "Chương 3", title: "Sân bay và chiếc va li quá cân", desc: "Chuyến xuất ngoại đầu tiên sang Đài Loan, cuộc chia tay gia đình đầy lưu luyến và trận sốt cao giúp nhận ra khả năng tự đứng vững." },
+            { num: "Chương 4", title: "Ngôn ngữ và cánh cửa mới", desc: "Từ cảm giác 'vô hình' vì rào cản tiếng Hoa đến bài học dũng cảm 'dám sai' từ cô bạn Mei và nghệ thuật lắng nghe sâu sắc." },
+            { num: "Chương 5", title: "Khi học thuật gặp thực tế", desc: "Biến cố hay tin mẹ mắc bệnh nặng nơi quê nhà và bước ngoặt chọn đề tài ứng dụng AI chẩn đoán bệnh qua hình ảnh X-quang." },
+            { num: "Chương 6", title: "Những người bạn gặp trên đường", desc: "Những buổi chiều bên quán trà nhỏ với chị My, bài học về sự chân thành trong các mối quan hệ và cách làm bạn với chính mình." },
+            { num: "Chương 7", title: "Những đêm không ngủ", desc: "Đối diện với những cơn bão lo âu lúc hai giờ sáng bằng cuốn nhật ký đêm và học cách phân biệt nỗi sợ với trực giác bên trong." },
+            { num: "Chương 8", title: "Về nhà và thấy mình lạ", desc: "Cảm giác chênh vênh trong lần đầu trở về thăm quê hương sau hơn một năm xa cách, tìm lại cội nguồn trong diện mạo trưởng thành mới." },
+            { num: "Chương 9", title: "Điều tôi đã không biết về thành công", desc: "Sự trống rỗng sau đêm nhận bài báo quốc tế đầu tiên và hành trình định nghĩa lại hai chữ 'thành công' bằng sự bình yên mỗi đêm." },
+            { num: "Chương 10", title: "Chiếc laptop và câu hỏi lớn hơn nó", desc: "Kỷ niệm buổi chiều đi mua chiếc laptop đầu tiên từ số tiền chắt chiu của ba mẹ, cột mốc tự chủ tài chính và cách trả tiếp ân tình." },
+            { num: "Chương 11", title: "Dạy và học là một", desc: "Những giờ phút run tay lần đầu đứng trên bục giảng đại học, buông bỏ chiếc mặt nạ hoàn hảo để cùng sinh viên khám phá tri thức." },
+            { num: "Chương 12", title: "Những chân trời từng nằm trong nhật ký", desc: "Hành trình biến giấc mơ thành hiện thực qua những chuyến đi tới Singapore (đưa em trai du học), Paris, Santorini và nước Mỹ." },
+            { num: "Chương 13", title: "Bước qua cửa", desc: "Khép lại hành trình: cánh cửa lớn nhất không nằm ở một cột mốc vĩ đại, mà ở sự thành thật bước vào chính mình mỗi ngày." }
+        ];
+
+        // Dữ liệu bài viết Blog Modal
+        window.blogArticles = {
+            1: {
+                tag: "Hậu trường bản thảo · Tháng 11, 2026",
+                title: "Vì sao mình chọn kể chuyện thay vì đưa ra lời khuyên?",
+                paragraphs: [
+                    "Khi mới đặt bút viết những dòng đầu tiên cho bản thảo 'Bước Qua Cửa', mình từng mang tâm thế của một người đi trước muốn tổng kết lại thật nhiều bài học để chia sẻ với các bạn trẻ. Bản thảo khi ấy dày đặc những phân tích tâm lý, những khái niệm học thuật và những gạch đầu dòng khuyên nhủ.",
+                    "Nhưng rồi chính biên tập viên đã giúp mình nhận ra một điều vô cùng quý giá: độc giả không tìm đến một cuốn tản văn để nghe giảng đạo. Mỗi người đều có một cuộc đời riêng với những hoàn cảnh không ai giống ai.",
+                    "Vì thế, mình đã ngồi viết lại toàn bộ cuốn sách bằng chất liệu tự sự chân thật nhất — kể về mùi khói bếp chiều ở làng quê, kể về giọt nước mắt tủi thân trong căn phòng trọ nhỏ ở Đài Loan, kể về sự hoang mang khi hay tin mẹ bệnh nặng. Bởi mình tin rằng, khi câu chuyện đủ thật, tự khắc mỗi người đọc sẽ tìm thấy mảnh ghép của chính mình trong đó."
+                ]
+            },
+            2: {
+                tag: "Nhật ký xứ người · Tháng 10, 2026",
+                title: "Bát phở trong con hẻm nhỏ và nỗi nhớ cơm nhà",
+                paragraphs: [
+                    "Những tháng đầu mới sang Đài Loan, nỗi nhớ nhà của mình không ập đến vào những dịp lễ lớn, mà thường len lỏi vào lúc bảy giờ tối — khi bước ra khỏi phòng thí nghiệm giữa cơn gió mùa lạnh buốt và bụng đói cồn cào.",
+                    "Sau nhiều lần đi lạc qua những con phố lạ, mình tình cờ tìm thấy một quán phở Việt nhỏ xíu nằm sâu trong con hẻm gần khu ký túc xá. Chủ quán là một cô người Việt lấy chồng xa xứ đã hơn mười năm. Nghe giọng nói quê hương vang lên giữa lòng phố thị xứ người, tự nhiên sống mũi mình cay xè.",
+                    "Bát phở nóng hổi với mùi quế hồi, hành lá thơm lừng hôm ấy đã dạy mình một bài học giản dị về lòng biết ơn: đôi khi hạnh phúc không nằm ở những đích đến xa xôi, mà nằm ở một điểm tựa ấm áp xuất hiện đúng lúc ta mệt mỏi nhất."
+                ]
+            }
+        };
+
+        // Render mục lục 13 chương
+        window.renderTOC = function() {
+            const grid = document.getElementById('toc-grid');
+            if (!grid) return;
+            grid.innerHTML = window.chaptersData.map((ch, idx) => `
+                <div onclick="window.toggleChapter(${idx})" class="cursor-pointer bg-white hover:bg-paperDark/60 border border-amberWarm/20 rounded-xl p-4 transition-all">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-amberWarm uppercase tracking-wider">${ch.num}</span>
+                            <h3 class="font-serifTitle text-base sm:text-lg font-bold text-navy mt-0.5">${ch.title}</h3>
+                        </div>
+                        <span id="toc-icon-${idx}" class="text-navy/60 text-lg font-light transition-transform">+</span>
+                    </div>
+                    <p id="toc-desc-${idx}" class="hidden font-serifBody text-sm text-inkMuted mt-3 pt-2.5 border-t border-amberWarm/15 leading-relaxed">
+                        ${ch.desc}
+                    </p>
+                </div>
+            `).join('');
+        };
+
+        window.toggleChapter = function(idx) {
+            const desc = document.getElementById(`toc-desc-${idx}`);
+            const icon = document.getElementById(`toc-icon-${idx}`);
+            if (!desc || !icon) return;
+            const isHidden = desc.classList.contains('hidden');
+            desc.classList.toggle('hidden');
+            icon.textContent = isHidden ? '−' : '+';
+        };
+
+        // Chuyển đổi giữa 4 trang (Tabs)
+        window.switchPage = function(pageId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) targetPage.classList.add('active');
+
+            // Cập nhật trạng thái active trên menu Desktop
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                btn.classList.remove('text-navy', 'border-amberWarm');
+                btn.classList.add('text-inkMuted', 'border-transparent');
+            });
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-inkMuted', 'border-transparent');
+                activeBtn.classList.add('text-navy', 'border-amberWarm');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.toggleMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        };
+
+        window.scrollToReader = function() {
+            setTimeout(() => {
+                const reader = document.getElementById('chapter-reader');
+                if (reader) reader.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        };
+
+        // Tùy chỉnh cỡ chữ & màu nền khung đọc thử
+        let currentFontSize = 18;
+        window.changeFontSize = function(delta) {
+            currentFontSize = Math.min(24, Math.max(15, currentFontSize + delta));
+            const box = document.getElementById('reader-box');
+            if (box) box.style.fontSize = `${currentFontSize}px`;
+        };
+
+        window.setReaderTheme = function(theme) {
+            const box = document.getElementById('reader-box');
+            if (!box) return;
+            box.classList.remove('reader-paper', 'reader-sepia', 'reader-dark');
+            box.classList.add(`reader-${theme}`);
+        };
+
+        // Modal đọc bài viết
+        window.openArticleModal = function(id) {
+            const art = window.blogArticles[id];
+            if (!art) return;
+            document.getElementById('modal-tag').textContent = art.tag;
+            document.getElementById('modal-title').textContent = art.title;
+            document.getElementById('modal-body').innerHTML = art.paragraphs.map(p => `<p>${p}</p>`).join('');
+            document.getElementById('article-modal').classList.remove('hidden');
+        };
+
+        window.closeArticleModal = function() {
+            const modal = document.getElementById('article-modal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        // Xử lý gửi biểu mẫu độc giả
+        window.handleFormSubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('reader-form').classList.add('hidden');
+            document.getElementById('form-success').classList.remove('hidden');
+        };
+
+        window.resetForm = function() {
+            document.getElementById('reader-form').reset();
+            document.getElementById('form-success').classList.add('hidden');
+            document.getElementById('reader-form').classList.remove('hidden');
+        };
+
+        // Khởi tạo ngay khi DOM sẵn sàng
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.renderTOC);
+        } else {
+            window.renderTOC();
+        }
+    </script>
+</body>
+</html>
