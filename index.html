@@ -248,6 +248,16 @@
                                         <p class="font-serifBody italic text-sm opacity-95">“Sau những lần bắt đầu, ta biết mình là ai.”</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phần giới thiệu tác phẩm "Bước Qua Cửa" -->
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+                <div class="bg-white/70 border border-amberWarm/20 rounded-3xl p-8 sm:p-12 shadow-sm">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                         <!-- Bìa Sách Chính Thức (Có nút lật xem Bìa Trước / Bìa Sau) -->
                         <div class="lg:col-span-5 flex flex-col items-center book-cover-wrapper">
                             <!-- Nút chuyển đổi Bìa Trước / Bìa Sau -->
@@ -446,9 +456,10 @@
                         <div class="rounded-2xl overflow-hidden shadow-lg border border-amberWarm/20 bg-paperDark aspect-[4/5]">
                             <img 
                                 src="chan-dung.jpg" 
-                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=85';"
+                                data-fallbacks="IMG_4990.jpg,IMG_2392.jpg,https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=85"
+                                onerror="let list = this.dataset.fallbacks.split(','); if(list.length > 0 && list[0] !== '') { this.src = list.shift(); this.dataset.fallbacks = list.join(','); } else { this.onerror = null; }"
                                 alt="Tác giả Lê Phượng" 
-                                class="w-full h-full object-cover"
+                                class="w-full h-full object-cover object-top"
                             >
                         </div>
                     </div>
@@ -898,8 +909,45 @@
     </div>
 
     <script>
-        // Gắn toàn bộ hàm vào window để tránh lỗi ReferenceError trên trình duyệt sandbox
+        // Dữ liệu mục lục 13 chương
         window.chaptersData = [
+            { num: "Chương 1", title: "Đêm hỏi mình là ai", desc: "Đêm tháng Mười năm hai mươi ba tuổi bên ô cửa sổ làng quê yên ắng, câu hỏi đầu tiên đánh thức hành trình tự tìm mình." },
+            { num: "Chương 2", title: "Chiếc va li nặng trĩu kỳ vọng", desc: "Buổi chiều chia tay gia đình ở sân bay với gói bánh tráng, hộp mứt gừng của nội và chuyến bay xuất ngoại đầu tiên." },
+            { num: "Chương 3", title: "Ngọng nghịu ở tiệm ăn sáng đầu ngõ", desc: "Những ngày đầu bỡ ngỡ nơi xứ người, học cách cất tiếng nói bằng từng thanh điệu mới." },
+            { num: "Chương 4", title: "Ánh đèn vàng ở phòng thí nghiệm", desc: "Những đêm thức trắng làm quen với nghiên cứu khoa học, những lần thử nghiệm thất bại và bài học kiên nhẫn." },
+            { num: "Chương 5", title: "Khi tin dữ gõ cửa", desc: "Biến cố bệnh tật của mẹ từ quê nhà và khoảnh khắc tìm thấy lý do thiêng liêng cho từng dòng mã AI đọc phim X-quang." },
+            { num: "Chương 6", title: "Khoảng trống giữa hai thế giới", desc: "Cảm giác chênh vênh mỗi lần trở về ngôi làng cũ và nhận ra mình không còn khớp hoàn toàn với những kỳ vọng xưa." },
+            { num: "Chương 7", title: "Lần đầu đứng trên bục giảng", desc: "Đôi tay run rẩy trước hàng chục ánh mắt sinh viên và triết lý 'Dạy và học là một'." },
+            { num: "Chương 8", title: "Học cách nói 'không' với sự an toàn", desc: "Dám tháo bỏ lớp áo giáp kỳ vọng để lắng nghe tiếng nói thật sự bên trong." },
+            { num: "Chương 9", title: "Bát phở trong con hẻm nhỏ", desc: "Lòng biết ơn dành cho những điều bình dị nhất vẫn âm thầm nâng đỡ ta qua ngày giông bão." },
+            { num: "Chương 10", title: "Người dẫn đường phía sau", desc: "Khoảnh khắc tự tay sắp xếp hành lý đưa em trai sang Singapore bắt đầu hành trình du học." },
+            { num: "Chương 11", title: "Đi để trở về", desc: "Dù đôi chân có đi qua bao nhiêu chân trời, quê hương vẫn luôn là bến đỗ bình yên nhất." },
+            { num: "Chương 12", title: "Những chân trời từng nằm trong nhật ký", desc: "Hành trình chạm tới Singapore, Paris, hoàng hôn Santorini, nước Mỹ và nhiều vùng đất từng chỉ dám viết trong sổ tay." },
+            { num: "Chương 13", title: "Bước qua cửa", desc: "Cánh cửa lớn nhất không nằm ở một sân bay xa xôi, mà ở khoảnh khắc ta dám thành thật bước vào chính mình mỗi ngày." }
+        ];
+
+        // Dữ liệu 2 lá thư blog
+        window.blogArticles = {
+            1: {
+                tag: "Hậu trường bản thảo · Tháng 11, 2026",
+                title: "Vì sao mình chọn kể chuyện thay vì đưa ra lời khuyên?",
+                paragraphs: [
+                    "Khi bắt đầu viết những chương đầu tiên của “Bước Qua Cửa”, mình từng có thói quen phân tích và đúc kết thật nhiều bài học ở cuối mỗi đoạn. Có lẽ vì làm nghiên cứu khoa học quen rồi, lúc nào mình cũng muốn mọi vấn đề phải có kết luận rõ ràng, mạch lạc.",
+                    "Nhưng càng viết, mình càng nhận ra điều chạm đến trái tim người đọc nhất không phải là những lời khuyên đúng đắn, mà là sự thành thật. Khi mình dám kể về nỗi sợ hãi lúc hai giờ sáng, về sự ngọng nghịu ở tiệm ăn sáng đầu ngõ hay cảm giác bất lực khi nghe tin mẹ bệnh, chính sự mong manh đó lại tạo nên sợi dây đồng cảm.",
+                    "Mình không viết cuốn sách này để chỉ cho ai một con đường mẫu mực. Mình chỉ muốn đặt xuống một chiếc ghế bên cạnh bạn, để bạn biết rằng những băn khoăn của bạn hoàn toàn có thật, và bạn không hề cô đơn."
+                ]
+            },
+            2: {
+                tag: "Nhật ký xứ người · Tháng 10, 2026",
+                title: "Bát phở trong con hẻm nhỏ và nỗi nhớ cơm nhà",
+                paragraphs: [
+                    "Có những buổi tối tan phòng lab muộn giữa mùa gió lạnh ở Đào Viên, thứ sưởi ấm lòng mình không phải là một thành tựu khoa học lớn lao, mà chỉ là mùi quế hồi thoang thoảng từ một quán phở Việt nhỏ nép mình cuối con hẻm.",
+                    "Những năm tháng xa nhà dạy mình cách trân trọng những điều tưởng chừng bé nhỏ: một tin nhắn vỏn vẹn ba chữ “Con ăn chưa?” của ba mỗi tối, hộp bánh ngọt người bạn cùng phòng đặt trước cửa, hay khoảnh khắc được hít hà hương vị quen thuộc của quê hương.",
+                    "Đi thật xa hóa ra không phải để quên đi nơi mình sinh ra, mà để hiểu rằng quê hương luôn nằm gọn trong trái tim, trở thành điểm tựa vững vàng nhất mỗi khi ta chùn bước."
+                ]
+            }
+        };
+
         // Xử lý gửi biểu mẫu độc giả (Mở sẵn trình gửi email về lethiphuong12sk@gmail.com)
         window.handleFormSubmit = function(e) {
             e.preventDefault();
@@ -1026,13 +1074,6 @@
         window.closeArticleModal = function() {
             const modal = document.getElementById('article-modal');
             if (modal) modal.classList.add('hidden');
-        };
-
-        // Xử lý gửi biểu mẫu độc giả
-        window.handleFormSubmit = function(e) {
-            e.preventDefault();
-            document.getElementById('reader-form').classList.add('hidden');
-            document.getElementById('form-success').classList.remove('hidden');
         };
 
         window.resetForm = function() {
